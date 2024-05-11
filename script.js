@@ -17,7 +17,7 @@ const showForms = () => {
 
 const hideForms = () => {
   addForm.hidden = true;
-  editBtn.hidden = true;
+  editForm.hidden = true;
   backdrop.hidden = true;
 };
 
@@ -25,6 +25,7 @@ const addContact = (contact) => {
   const listItem = document.createElement("li");
   listItem.classList.add("contact-item");
   listItem.setAttribute("role", "article");
+  listItem.setAttribute("data-id", Date.now());
 
   listItem.innerHTML = `
   <button class="contact-item__tricolon-btn" type="button" aria-label="Edit contact">
@@ -74,14 +75,13 @@ const addContact = (contact) => {
 };
 
 const updateContactCard = (contact) => {
-  const contactCard = document.querySelector(".contact-item");
-  const contact = {
-    name: contactCard.querySelector(".contact-item__name").textContent,
-    position: contactCard.querySelector(".contact-item__position").textContent,
-    company: contactCard.querySelector(".contact-item__company").textContent,
-    phone: contactCard.querySelector(".contact-item__contact-info.phone").textContent,
-    email: contactCard.querySelector(".contact-item__contact-info.email").textContent,
-  };
+  const contactCard = document.querySelector(`[data-id='${contact.id}']`);
+  contactCard.querySelector(".contact-item__name").textContent = contact.name;
+  contactCard.querySelector(".contact-item__position").textContent = contact.position;
+  contactCard.querySelector(".contact-item__company").textContent = contact.company;
+  contactCard.querySelector(".contact-item__contact-info.phone").textContent = contact.phone;
+  contactCard.querySelector(".contact-item__contact-info.email").textContent = contact.email;
+
 
   Object.entries(contact).forEach(([key, value]) => {
     editForm.elements[key].value = value;
@@ -118,9 +118,11 @@ const handleAdd = (e) => {
 const handleEdit = (e) => {
   const contactCard = e.target.closest(".contact-item");
   if (contactCard) {
-    showForms();
+    editForm.hidden = false;
+    backdrop.hidden = false;
 
     const contactInfo = {
+      id: contactCard.getAttribute("data-id"),
       name: contactCard.querySelector(".contact-item__name").textContent,
       position: contactCard.querySelector(".contact-item__position").textContent,
       company: contactCard.querySelector(".contact-item__company").textContent,
@@ -140,6 +142,7 @@ const handleSave = (e) => {
   e.preventDefault();
 
   const updatedContact = {
+    id: editForm.elements['id'].value,
     name: editForm.elements['name'].value,
     position: editForm.elements['position'].value,
     company: editForm.elements['company'].value,
@@ -152,8 +155,8 @@ const handleSave = (e) => {
 
 addForm.addEventListener("submit", handleAdd);
 editForm.addEventListener("submit", handleSave);
-addContactBtn.addEventListener("click", showForms);
 editBtn.addEventListener("click", handleEdit);
+addContactBtn.addEventListener("click", showForms);
 contactList.addEventListener("click", (e) => { showContactBtn(e) });
 deleteBtn.addEventListener("click", deleteContact);
 backdrop.addEventListener("click", closeForms);

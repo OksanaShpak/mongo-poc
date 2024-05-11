@@ -31,7 +31,7 @@
     </header>
 
     <ul class="contact-list">
-      <li class="contact-item" role="article">
+      <li class="contact-item" role="article" data-id="1715416863464">
         <div class="contact-item__tricolon">
           <button class="contact-item__tricolon-btn" type="button" aria-label="Edit contact">
             <svg aria-hidden="true" focusable="false" class="contact-item__tricolon-btn-icon" fill="none"
@@ -121,6 +121,7 @@
       </form>
 
       <form id="edit-form" aria-labelledby="edit-contact-heading" hidden>
+        <input type="hidden" id="edit-id" name="id" value="">
         <h2 id="edit-contact-heading">Edit Contact</h2>
         <div class="form-group">
           <label for="edit-name">Name:</label>
