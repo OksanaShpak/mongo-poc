@@ -1,6 +1,6 @@
 const contactList = document.querySelector(".contact-list");
 const [addForm, editForm] = document.forms;
-const cancelBtn = editForm.querySelector(".cancel");
+const cancelBtn = editForm.querySelector(".btn-cancel");
 const addContactBtn = document.querySelector(".add-contact__new-contact-btn");
 const contactItemTricolon = document.querySelector(".contact-item__tricolon");
 const editBtn = document.querySelector(".contact-item__edit-item-btn");
@@ -47,13 +47,13 @@ const showContactBtn = (e) => {
   }
 }
 
-const deleteContact = () => {
-  const listItem = document.querySelector(".contact-item");
-  listItem.remove();
+const deleteContact = (e) => {
+  const contactCard = e.target.closest(".contact-item");
+  contactCard.remove();
 };
 
 const closeForms = (e) => {
-  if (e.target === backdrop) {
+  if (e.target === backdrop || e.target === cancelBtn) {
     hideForms();
   }
 };
@@ -101,10 +101,13 @@ const handleSave = (e) => {
 };
 
 const handleClick = (e) => {
+  console.log(e.target, 'e.target');
   if (e.target.closest(".contact-item__tricolon-btn")) {
     showContactBtn(e);
   } else if (e.target.closest(".contact-item__edit-item-btn")) {
     handleEdit(e);
+  } else if (e.target.closest(".contact-item__delete-item-btn")) {
+    deleteContact(e);
   }
 };
 
@@ -112,5 +115,4 @@ addForm.addEventListener("submit", handleAdd);
 editForm.addEventListener("submit", handleSave);
 addContactBtn.addEventListener("click", showForms);
 contactList.addEventListener("click", (e) => { handleClick(e) });
-deleteBtn.addEventListener("click", deleteContact);
 backdrop.addEventListener("click", closeForms);
