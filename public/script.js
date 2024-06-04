@@ -19,10 +19,20 @@ const hideForms = () => {
   backdrop.hidden = true;
 };
 
-const addContact = (contact) => {
+const addContact = async (contact) => {
   contact.id = Date.now();
-  contacts.push(contact);
-  contactList.innerHTML = render(contacts);
+
+  await fetch('/api/contact', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(contact),
+  })
+
+  getContacts().then((contacts) => {
+    contactList.innerHTML = render(contacts);
+  });
 };
 
 const updateContactCard = (contact) => {
@@ -111,8 +121,20 @@ const handleClick = (e) => {
   }
 };
 
+const getContacts = async () => {
+  const response = await fetch('/api/contacts');
+  const contacts = await response.json();
+
+  return contacts;
+};
+
+getContacts().then((contacts) => {
+  contactList.innerHTML = render(contacts);
+});
+
 addForm.addEventListener("submit", handleAdd);
 editForm.addEventListener("submit", handleSave);
 addContactBtn.addEventListener("click", showForms);
 contactList.addEventListener("click", (e) => { handleClick(e) });
 backdrop.addEventListener("click", closeForms);
+

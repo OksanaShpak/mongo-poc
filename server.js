@@ -1,3 +1,5 @@
+const { readFileSync } = require('fs');
+
 const startServer = ({ create, read, update, dremove }) => {
   const server = require('http').createServer();
   const port = 3000;
@@ -33,7 +35,25 @@ const startServer = ({ create, read, update, dremove }) => {
         response.writeHead(404).end(JSON.stringify({ error: 'Not Found' }));
       }
     } else {
-
+      if(url === '/'){
+        const html = readFileSync('public/index.html');
+        response.writeHead(200).end(html);
+      } else if(url === '/style.css'){
+        const css = readFileSync('public/style.css');
+        response.writeHead(200).end(css);
+      } else if (url === '/script.js') {
+        const js = readFileSync('public/script.js');
+        response.writeHead(200).end(js);
+      } else if (url === '/data.js') {
+        const data = readFileSync('public/data.js');
+        response.writeHead(200).end(data);
+      } else if (url === '/contact1.jpg'){
+        const img = readFileSync('public/contact1.jpg');
+        response.writeHead(200).end(img);
+      } else if (url === '/favicon.ico'){
+        const icon = readFileSync('public/favicon.ico');
+        response.writeHead(200).end(icon);
+      }
     }
   }
 };
