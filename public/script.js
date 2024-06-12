@@ -42,11 +42,11 @@ const updateContactCard = (contact) => {
   contactCard.querySelector(".contact-item__company").textContent = contact.company;
   contactCard.querySelector(".contact-item__contact-info.phone").textContent = contact.phone;
   contactCard.querySelector(".contact-item__contact-info.email").textContent = contact.email;
+  contactCard.querySelector(".contact-item__img").src = contact.image;
 
-
-  Object.entries(contact).forEach(([key, value]) => {
-    editForm.elements[key].value = value;
-  });
+  // Object.entries(contact).forEach(([key, value]) => {
+  //   editForm.elements[key].value = value;
+  // });
 };
 
 const showContactBtn = (e) => {
@@ -57,8 +57,17 @@ const showContactBtn = (e) => {
   }
 }
 
-const deleteContact = (e) => {
+const deleteContact = async (e) => {
   const contactCard = e.target.closest(".contact-item");
+
+  await fetch('/api/contact', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id: contactCard.getAttribute("data-id") }),
+  });
+
   contactCard.remove();
 };
 
@@ -73,8 +82,14 @@ const handleAdd = (e) => {
 
   const contact = Object.fromEntries(new FormData(addForm));
 
-  addContact(contact);
-  hideForms();
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    contact.image = reader.result;
+
+    addContact(contact);
+    hideForms();
+  }
+  reader.readAsDataURL(contact.image);
 };
 
 const handleEdit = (e) => {
@@ -95,7 +110,7 @@ const handleEdit = (e) => {
   }
 };
 
-const handleSave = (e) => {
+const handleSave = async (e) => {
   e.preventDefault();
 
   const updatedContact = {
@@ -105,13 +120,29 @@ const handleSave = (e) => {
     company: editForm.elements['company'].value,
     phone: editForm.elements['phone'].value,
     email: editForm.elements['email'].value,
+    image: editForm.elements['image'].files[0],
   };
 
-  updateContactCard(updatedContact);
+  const reader = new FileReader();
+
+  reader.onloadend = async () => {
+    updatedContact.image = reader.result;
+    
+    await fetch('/api/contact', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedContact),
+    });
+
+    updateContactCard(updatedContact);
+  }
+
+  reader.readAsDataURL(updatedContact.image);
 };
 
 const handleClick = (e) => {
-  console.log(e.target, 'e.target');
   if (e.target.closest(".contact-item__tricolon-btn")) {
     showContactBtn(e);
   } else if (e.target.closest(".contact-item__edit-item-btn")) {
@@ -128,8 +159,9 @@ const getContacts = async () => {
   return contacts;
 };
 
-getContacts().then((contacts) => {
-  contactList.innerHTML = render(contacts);
+getContacts().then((contactsData) => {
+  contacts.splice(0, contacts.length, ...contactsData);
+  contactList.innerHTML = render(contactsData);
 });
 
 addForm.addEventListener("submit", handleAdd);
@@ -137,4 +169,3 @@ editForm.addEventListener("submit", handleSave);
 addContactBtn.addEventListener("click", showForms);
 contactList.addEventListener("click", (e) => { handleClick(e) });
 backdrop.addEventListener("click", closeForms);
-

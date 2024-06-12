@@ -1,29 +1,29 @@
 const contacts = [
-  {
-    id: 1,
-    image: 'https://randomuser.me/api/portraits/men/1.jpg',
-    name: 'John Doe',
-    position: 'Software Engineer',
-    company: 'MongoDB',
-    email: 'johndoe@example.com',
-    phone: '555-555-5555',
-  }, {
-    id: 2,
-    image: 'https://randomuser.me/api/portraits/men/2.jpg',
-    name: 'Jane Doe',
-    position: 'Software Engineer',
-    company: 'MongoDB',
-    email: 'janedoe@example.com',
-    phone: '555-555-5556',
-  }, {
-    id: 3,
-    image: 'https://randomuser.me/api/portraits/men/3.jpg',
-    name: 'John Doe',
-    position: 'Software Engineer',
-    company: 'MongoDB',
-    email: 'johndoe@example.com',
-    phone: '555-555-5557',
-  }
+  // {
+  //   id: 1,
+  //   image: 'https://randomuser.me/api/portraits/men/1.jpg',
+  //   name: 'John Doe',
+  //   position: 'Software Engineer',
+  //   company: 'MongoDB',
+  //   email: 'johndoe@example.com',
+  //   phone: '555-555-5555',
+  // }, {
+  //   id: 2,
+  //   image: 'https://randomuser.me/api/portraits/men/2.jpg',
+  //   name: 'Jane Doe',
+  //   position: 'Software Engineer',
+  //   company: 'MongoDB',
+  //   email: 'janedoe@example.com',
+  //   phone: '555-555-5556',
+  // }, {
+  //   id: 3,
+  //   image: 'https://randomuser.me/api/portraits/men/3.jpg',
+  //   name: 'John Doe',
+  //   position: 'Software Engineer',
+  //   company: 'MongoDB',
+  //   email: 'johndoe@example.com',
+  //   phone: '555-555-5557',
+  // }
 ]
 
 const render = (contacts) => {
