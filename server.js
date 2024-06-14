@@ -47,9 +47,6 @@ const startServer = ({ create, read, update, dremove }) => {
       } else if (url === '/data.js') {
         const data = readFileSync('public/data.js');
         response.writeHead(200).end(data);
-      } else if (url === '/contact1.jpg'){
-        const img = readFileSync('public/contact1.jpg');
-        response.writeHead(200).end(img);
       } else if (url === '/favicon.ico'){
         const icon = readFileSync('public/favicon.ico');
         response.writeHead(200).end(icon);
