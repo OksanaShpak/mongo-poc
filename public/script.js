@@ -30,7 +30,8 @@ const addContact = async (contact) => {
     body: JSON.stringify(contact),
   })
 
-  getContacts().then((contacts) => {
+  getContacts().then((contactsData) => {
+    contacts.splice(0, contacts.length, ...contactsData);
     contactList.innerHTML = render(contacts);
   });
 };
@@ -123,11 +124,9 @@ const handleSave = async (e) => {
     image: editForm.elements['image'].files[0],
   };
 
-  const reader = new FileReader();
+  if (!updatedContact.image) {
+    delete updatedContact.image;
 
-  reader.onloadend = async () => {
-    updatedContact.image = reader.result;
-    
     await fetch('/api/contact', {
       method: 'PUT',
       headers: {
@@ -137,9 +136,26 @@ const handleSave = async (e) => {
     });
 
     updateContactCard(updatedContact);
-  }
 
-  reader.readAsDataURL(updatedContact.image);
+  } else {
+    const reader = new FileReader();
+
+    reader.onloadend = async () => {
+      updatedContact.image = reader.result;
+
+      await fetch('/api/contact', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedContact),
+      });
+
+      updateContactCard(updatedContact);
+    }
+
+    reader.readAsDataURL(updatedContact.image);
+  }
 };
 
 const handleClick = (e) => {
@@ -167,5 +183,5 @@ getContacts().then((contactsData) => {
 addForm.addEventListener("submit", handleAdd);
 editForm.addEventListener("submit", handleSave);
 addContactBtn.addEventListener("click", showForms);
-contactList.addEventListener("click", (e) => { handleClick(e) });
+contactList.addEventListener("click", handleClick);
 backdrop.addEventListener("click", closeForms);
