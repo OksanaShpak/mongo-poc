@@ -9,7 +9,7 @@ const backdrop = document.querySelector(".backdrop");
 
 const showForms = () => {
   addForm.hidden = false;
-  editBtn.hidden = false;
+  // editBtn.hidden = false;
   backdrop.hidden = false;
 };
 
@@ -91,6 +91,7 @@ const handleAdd = (e) => {
     hideForms();
   }
   reader.readAsDataURL(contact.image);
+  addForm.reset();
 };
 
 const handleEdit = (e) => {
